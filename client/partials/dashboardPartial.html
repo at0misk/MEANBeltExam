@@ -1,0 +1,30 @@
+<h1>Welcome {{currentUser.name}}!</h1>
+ <form ng-submit="addItem()">
+  <input type="text" ng-model="newItem.title" placeholder="Title">
+  <input type="text" ng-model="newItem.description" placeholder="Description">
+  <select ng-model="newItem.tagged" ng-options="user.name as user.name for user in users" class="browser-default">
+  <option value="">Tag a User</option>
+  </select>
+  <input type="submit" value="Enter">
+</form>
+<table>
+  <thead>
+    <tr><td>Status</td><td>Title</td><td>Description</td></tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="list in currentUser.lists">
+    <td ng-if="list.complete % 2 !== 0">
+  		<input type="checkbox" ng-model="status" ng-change="change(list._id)" id="status" checked>
+    </td>
+    <td ng-if="list.complete % 2 == 0">
+  		<input type="checkbox" ng-model="status" ng-change="change(list._id)" id="status">
+    </td>
+      <td>{{list.title}}</td>
+      <td>{{list.description}}</td>
+    </tr>
+  </tbody>
+</table>
+  <h2>List of other Users</h2>
+  <div ng-repeat="user in users">
+  <p><a href="#/profile/{{user._id}}">{{user.name}}</a></p>
+  </div>

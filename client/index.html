@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html ng-app="discussion_app">
+<head>
+	<title>Login</title>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.3.5/angular.min.js'/></script>
+ 	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.5/angular-route.min.js"></script>
+ 	<script type="text/javascript">
+ 		var discussion_app = angular.module('discussion_app', ['ngRoute']);
+ 		 //partial routes
+ 		discussion_app.config(function ($routeProvider){
+ 			$routeProvider
+ 			.when('/',{
+ 				templateUrl: 'partials/loginPartial.html',
+ 				controller: 'usersController'
+ 			})
+ 			.when('/dashboard',{
+ 				templateUrl: 'partials/dashboardPartial.html',
+ 				controller: 'dashboardController'
+ 			})
+ 			.when('/profile/:id',{
+ 				templateUrl: 'partials/profilePartial.html',
+ 				controller: 'profileController'
+ 			})
+ 			// .when('/answer/:param1',{
+ 			// 	templateUrl: 'partials/answerPartial.html',
+ 			// 	controller: 'answerController'
+ 			// })
+ 			.otherwise({
+ 				redirectTo: '/'
+ 			});
+ 		});
+ 		//factories
+ 		discussion_app.factory('userFactory', function($http, $location){
+ 			var error = "";
+ 			var factory = {};
+ 			var currentUser = {};
+ 			var users = {};
+ 			var currentList = {};
+ 			factory.create = function(newUser, callback){
+ 				console.log(newUser);
+ 				$http.post('/users', newUser).success(function(output){
+ 					currentUser = output;
+ 					callback(currentUser);
+ 				});
+ 			}
+ 			factory.getUser = function(callback){
+ 				if(currentUser) callback(currentUser);
+ 				else{
+ 					$location.path('/');
+ 				}
+ 			}
+ 			factory.getList = function(callback){
+ 				console.log(currentList);
+ 				if(currentList) callback(currentList);
+ 				else{
+ 					$location.path('/');
+ 				}
+ 			}
+ 			factory.index = function(callback){
+ 				$http.get('/users').success(function(output){
+ 					users = output;
+ 					callback(users);
+ 				})
+ 			}
+ 			factory.find = function(id, callback){
+ 				$http.get('/getlists/' + id).success(function(output){
+ 					currentList = output;
+ 					callback(currentList);
+ 				})
+ 			}
+ 			return factory;
+ 		})
+ 		discussion_app.factory('listFactory', function($http){
+ 			var factory = {};
+ 			var lists = {};
+ 			var currentList = {};
+ 			factory.index = function(callback){
+ 				$http.get('/lists').success(function(output){
+ 					lists = output;
+ 					callback(lists);
+ 				})
+ 			}
+ 			factory.create = function(newList, callback){
+ 				 console.log(newList);
+ 				$http.post('/lists', newList).success(function(output){
+ 					callback(output);
+ 				})
+ 			}
+ 			factory.find = function(id, callback){
+ 				$http.get('/lists/' + id).success(function(output){
+ 					currentList = output;
+ 					callback(currentList);
+ 				})
+ 			}
+ 			factory.update = function(id, callback){
+ 				$http.put('/lists/' + id).success(function(output){
+ 					callback(output);
+ 				})
+ 			}
+ 			// factory.getQuestion = function(callback){
+ 			// 	if(currentQuestion) callback(currentQuestion);
+ 			// 	else{
+ 			// 		$location.path('/');
+ 			// 	}
+ 			// }
+ 			return factory;
+ 		})
+ 		//controllers
+ 		discussion_app.controller('usersController', function($scope, userFactory, $location){
+ 			$scope.newUser = {};
+ 			$scope.currentUser = $scope.newUser;
+ 			$scope.addUser = function(){
+ 			userFactory.create($scope.newUser, function(data){
+ 				console.log(data)
+ 				$location.path('/dashboard')
+ 			});
+ 		}
+ 		})
+ 		discussion_app.controller('dashboardController', function($scope, listFactory, userFactory){
+ 			$scope.newItem = {};
+ 			$scope.currentUser = {};
+ 			$scope.currentList = {};
+ 			userFactory.getUser(function(user){
+ 				$scope.currentUser = user;
+ 				$scope.newItem._author = $scope.currentUser._id;
+ 				$scope.newItem.complete = false;
+ 				userFactory.find($scope.currentUser._id, function(data){
+ 					$scope.currentUser = data;
+ 					console.log($scope.currentUser);
+ 				})
+			})
+			userFactory.index(function (data){
+ 				$scope.users = data;
+ 			})
+ 			$scope.addItem = function(){
+ 				listFactory.create($scope.newItem, function(data){
+ 					// console.log(data);
+ 					userFactory.find($scope.currentUser._id, function(data){
+ 					$scope.currentUser = data;
+ 					console.log($scope.currentUser);
+ 				})
+ 				})
+ 			}
+ 			$scope.change = function(id){
+ 				listFactory.update(id, function(data){
+ 					console.log(data)
+ 				})
+ 			}
+ 		})
+ 		discussion_app.controller('profileController', function($scope, listFactory, userFactory, $routeParams){
+ 			$scope.foundUser = {};
+ 			var id = $routeParams.id;
+ 			console.log(id);
+ 			userFactory.find(id, function(data){
+ 				$scope.foundUser = data;
+ 				console.log($scope.foundUser);
+ 			})
+ 		})
+ 	</script>
+</head>
+<body>
+Bucket List | <a href="#/dashboard">Home</a> | <a href="#/">Logout</a>
+<div ng-view=''>
+</div>
+</body>
+</html>

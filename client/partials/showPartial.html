@@ -1,0 +1,9 @@
+<h2>Question: {{currentQuestion.title}}</h2>
+<h3>Description: {{currentQuestion.description}}</h3>
+<!-- {{currentQuestion.comments}} -->
+<h4>Comments:</h4>
+{{currentQuestion}}
+<div ng-repeat="comments in currentQuestion.comments">
+<p>{{comments.answer}}</p>
+<p>{{comments.vote}}<form><button ng-click="Up(comments._id)">Up</button></form><form><button ng-click="Down()">Down</button></p>
+</div>

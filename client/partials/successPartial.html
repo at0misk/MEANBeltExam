@@ -1,0 +1,25 @@
+<h3>Welcome {{currentUser.name}}!</h3>
+  <input type="text" ng-model="filter_name" placeholder="filter">
+  {{filter_name}}
+<table>
+	<thead>
+		<tr>
+			<td>Category</td><td>Topics</td><td>User</td><td>Posts</td>
+		</tr>
+	</thead>
+	<tbody>
+    	<tr ng-repeat="topic in topics | filter: filter_name">
+    		<td>{{topic.cat}}</td>
+    		<td>{{topic.name}}</td>
+    		<td>{{topic._author.name}}</td>
+    		<td>Some Post</td>
+		</tr>
+	</tbody>
+</table>
+<form ng-submit="addTopic()">
+	<p>Topic: <input type="text" ng-model="new_topic.name"></p>
+	<p>Description: <textarea ng-model="new_topic.description" cols="40" rows="10"></textarea></p>
+	<p>Category: <select ng-model="new_topic.cat" ng-options="cat.name as cat.name for cat in cats">
+	</select>
+	<p><input type="submit" value="Add New Topic!"></p>
+</form>

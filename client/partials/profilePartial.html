@@ -1,0 +1,28 @@
+<h1>{{foundUser.name}}</h1>
+<h3>Done</h3>
+<table>
+  <thead>
+    <tr><td>Status</td><td>Title</td><td>Description</td></tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="list in foundUser.lists">
+      <td ng-if="list.complete % 2 !== 0"><input type="checkbox" checked disabled></td>
+      <td ng-if="list.complete % 2 !== 0">{{list.title}}</td>
+      <td ng-if="list.complete % 2 !== 0">{{list.description}}</td>
+    </tr>
+  </tbody>
+</table>
+<h3>Pending</h3>
+<table>
+  <thead>
+    <tr><td>Status</td><td>Title</td><td>Description</td></tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="list in foundUser.lists">
+      <td ng-if="list.complete % 2 == 0"><input type="checkbox" unchecked disabled></td>
+      <td ng-if="list.complete % 2 == 0">{{list.title}}</td>
+      <td ng-if="list.complete % 2 == 0">{{list.description}}</td>
+    </tr>
+    </tr>
+  </tbody>
+</table>

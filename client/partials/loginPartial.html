@@ -1,0 +1,27 @@
+<!-- <h3>Welcome {{currentUser.name}}!</h3>
+<h1>Add a customer</h1>
+  objects and properties nothing scary
+  <input type="text" ng-model="new_customer.name" placeholder="name">
+  addcustomer() is a method we are going to make in the angular controller
+  <input type="submit" ng-click="addcustomer()">
+  <h1>Questions</h1>
+  <input type="text" ng-model="filter_name" placeholder="filter">
+  {{filter_name}}
+  <table>
+  <thead>
+    <tr><td>Questions</td><td>Answers</td><td>Action</td></tr>
+  </thead>
+  <tbody>
+    here is where we are going to display customers
+    <tr ng-repeat="question in questions | filter: filter_name">
+      <td>{{question.title}}</td>
+      <td>{{question.comments.length}}</td>
+      <td><a href="#/show/{{question._id}}">Show</a><a href="#/answer/{{question._id}}">Answer</a></td>
+    </tr>
+  </tbody>
+  </table> -->
+  <h1>Bucket Lists</h1>
+ <form ng-submit="addUser()">
+  <p>Name: <input type="text" ng-model="newUser.name"></p>
+  <p><input type="submit" value="Enter"></p>
+</form>
